@@ -1,0 +1,36 @@
+{
+  "name": "tracking-patient-by-nurse",
+  "version": "1.0.0",
+  "description": "MEAN stack patient tracking app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "server":"nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ilgulee/comp308-project.git"
+  },
+  "keywords": [
+    "MEAN",
+    "stack"
+  ],
+  "author": "Ilgu Lee",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ilgulee/comp308-project/issues"
+  },
+  "homepage": "https://github.com/ilgulee/comp308-project#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.2.1",
+    "mongoose": "^5.0.15",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "validator": "^9.4.1"
+  }
+}
