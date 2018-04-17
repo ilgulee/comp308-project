@@ -8,12 +8,15 @@ const mongoose = require('mongoose');
 const app=express();
 
 //setup routes
-const patients = require('./routes/patients');
+const patients = require('./routes/api/patients');
+const profile=require('./routes/api/profile');
+
 const alerts=require('./routes/alerts');
 const exercises=require('./routes/exercises');
 const vitalsigns=require('./routes/vitalsigns');
 const symptoms=require('./routes/symptoms');
 const nurses=require('./routes/nurses');
+
 
 //MongoDB config
 const db=require('./config/keys').mongoURI;
@@ -33,9 +36,15 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Body Parser Middleware
+app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
-app.use('/patients',patients);
+// Passport Middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use('/api/patients',patients);
+app.use('/api/profile',profile);
 
 // Index Route
 app.get('/',(req,res)=>res.send('Hello COMP308 project'));
