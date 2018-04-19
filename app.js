@@ -10,11 +10,6 @@ const app=express();
 //setup routes
 const patients = require('./routes/api/patients');
 const profile=require('./routes/api/profile');
-
-const alerts=require('./routes/alerts');
-const exercises=require('./routes/exercises');
-const vitalsigns=require('./routes/vitalsigns');
-const symptoms=require('./routes/symptoms');
 const nurses=require('./routes/nurses');
 
 
@@ -42,6 +37,7 @@ app.use(bodyParser.json());
 // Passport Middleware
 app.use(passport.initialize());
 app.use(passport.session());
+require('./config/passport')(passport);
 
 app.use('/api/patients',patients);
 app.use('/api/profile',profile);
