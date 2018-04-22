@@ -10,7 +10,7 @@ const app=express();
 //setup routes
 const patients = require('./routes/api/patients');
 const profile=require('./routes/api/profile');
-const nurses=require('./routes/nurses');
+const nurses=require('./routes/api/nurses');
 
 
 //MongoDB config
@@ -41,6 +41,7 @@ require('./config/passport')(passport);
 
 app.use('/api/patients',patients);
 app.use('/api/profile',profile);
+app.use('/api/nurses',nurses);
 
 // Index Route
 app.get('/',(req,res)=>res.send('Hello COMP308 project'));

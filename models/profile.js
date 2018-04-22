@@ -2,126 +2,146 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // Create Schema
-const ProfileSchema = new Schema({
-  patient: {
-    type: Schema.Types.ObjectId,
-    ref: "patient"
-  },
-  address: {
-    type: String,
-    required: true
-  },
-  phone: {
-    type: String,
-    required: true
-  },
-  history: {
-    type: [String]
-  },
-  birthday: {
-    type: Date,
-    required: true
-  },
-  gender: {
-    type: String,
-    required: true
-  },
-  blood: {
-    type: String,
-    required: true
-  },
-  visits: [
-    {
-      date: {
-        type: Date
+const ProfileSchema = new Schema(
+  {
+    patient: {
+      type: Schema.Types.ObjectId,
+      ref: "patients"
+    },
+    handle: {
+      type: String,
+      required: true,
+      unique:true,
+      max: 40
+    },
+    address: {
+      type: String,
+      required: true
+    },
+    phone: {
+      type: String,
+      required: true
+    },
+    history: {
+      type: [String]
+    },
+    birthday: {
+      type: Date,
+      required: true
+    },
+    gender: {
+      type: String,
+      required: true
+    },
+    blood: {
+      type: String,
+      required: true
+    },
+    visits: [
+      {
+        date: {
+          type: Date
+        }
       }
-    }
-  ],
-  alert: [
-    {
-      reason: {
-        type: String
+    ],
+    alerts: [
+      {
+        reason: {
+          type: String
+        },
+        isChecked: {
+          type: Boolean,
+          default: false
+        },
+        isCalcelled: {
+          type: Boolean,
+          default: false
+        },
+        description: {
+          type: String
+        },
+        comment: {
+          type: String
+        },
+        time: {
+          type: Date,
+          default: Date.now
+        }
       },
-      sent: {
-        type: Date,
-        required: true,
-        default: Date.now
-      },
-      isChecked: {
-        type: Boolean,
-        default:false
-      },
-      isCalcelled: {
-        type: Boolean,
-        default:false
-      },
-      memo: {
-        type: String
+      {
+        timestamps: true
       }
-    }
-  ],
-  vital: [
-    {
-      temperature: {
-        type: Number,
-        required: true
-      },
-      heartRate: {
-        type: Number,
-        required: true
-      },
-      bloodPressure: {
-        type: Number,
-        required: true
-      },
-      respiratoryRate: {
-        type: Number,
-        required: true
-      },
-      date: {
-        type: Date,
-        required: true,
-        default: Date.now
-      },
-      description: {
-        type: String
-      },
-      memo: {
-        type: String
+    ],
+    vitals: [
+      {
+        temperature: {
+          type: Number,
+          required: true
+        },
+        heartRate: {
+          type: Number,
+          required: true
+        },
+        bloodPressure: {
+          type: Number,
+          required: true
+        },
+        respiratoryRate: {
+          type: Number,
+          required: true
+        },
+        description: {
+          type: String
+        },
+        comment: {
+          type: String
+        },
+        time: {
+          type: Date,
+          default: Date.now
+        }
       }
-    }
-  ],
-  symptom: [
-    {
-      fever: {
-        type: Boolean,
-        default:false,
-        required: true
+    ],
+    symptoms: [
+      {
+        fever: {
+          type: Boolean,
+          default: false,
+          required: true
+        },
+        cough: {
+          type: Boolean,
+          default: false,
+          required: true
+        },
+        fatigue: {
+          type: Boolean,
+          default: false,
+          required: true
+        },
+        age: {
+          type: Number,
+          required: true
+        },
+        description: {
+          type: String
+        },
+        comment: {
+          type: String
+        },
+        time: {
+          type: Date,
+          default: Date.now
+        }
       },
-      cough: {
-        type: Boolean,
-        default:false,
-        required: true
-      },
-      fatigue: {
-        type: Boolean,
-        default:false,
-        required: true
-      },
-      date: {
-        type: Date,
-        required: true,
-        default: Date.now
-      },
-      memo: {
-        type: String
+      {
+        timestamps: true
       }
-    }
-  ],
-  date: {
-    type: Date,
-    default: Date.now
+    ]
+  },
+  {
+    timestamps: true
   }
-});
+);
 
 module.exports = Profile = mongoose.model("Profile", ProfileSchema);

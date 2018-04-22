@@ -2,87 +2,110 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 const Patient = require("../../models/patient");
 const db = require("../../config/keys");
 
-//Register
-router.post("/register", (req, res, next) => {
+// Load Input Validation
+const validateRegisterInput = require("../../validation/register");
+const validateLoginInput = require("../../validation/login");
+
+// @route   GET api/users/test
+// @desc    Tests users route
+// @access  Public
+//router.get("/test", (req, res) => res.json({ msg: "Patients route Works" }));
+
+// @route   GET api/users/register
+// @desc    Register user
+// @access  Public
+router.post("/register", (req, res) => {
+  const { errors, isValid } = validateRegisterInput(req.body);
+
+  // Check Validation
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
   Patient.findOne({ email: req.body.email }).then(patient => {
     if (patient) {
-      return res.status(400).json({ email: "Email(username) already exists" });
+      errors.email = "Email already exists";
+      return res.status(400).json(errors);
     } else {
-      let newPatient = new Patient({
+      const newPatient = new Patient({
+        nurse: req.body.nurse,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
         password: req.body.password,
-        registeredDate: req.body.registeredDate,
-        nurseRef: req.body.nurseRef
+        role: req.body.role
       });
-      Patient.addPatient(newPatient, (err, patient) => {
-        if (err) {
-          res.json({
-            success: false,
-            msg: "Failed to register new patient"
-          });
-        } else {
-          res.json({
-            success: true,
-            msg: "New patient registered"
-          });
-        }
+
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(newPatient.password, salt, (err, hash) => {
+          if (err) throw err;
+          newPatient.password = hash;
+          newPatient
+            .save()
+            .then(patient => res.json(patient))
+            .catch(err => console.log(err));
+        });
       });
     }
   });
 });
 
-//Authenticate(login)
-router.post("/authenticate", (req, res, next) => {
+// @route   GET api/users/login
+// @desc    Login Patient / Returning JWT Token
+// @access  Public
+router.post("/login", (req, res) => {
+  const { errors, isValid } = validateLoginInput(req.body);
+
+  // Check Validation
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
   const email = req.body.email;
   const password = req.body.password;
 
-  Patient.getPatientByEmail(email, (err, patient) => {
-    if (err) {
-      throw err;
-    }
+  // Find user by email
+  Patient.findOne({ email }).then(patient => {
+    // Check for patient
     if (!patient) {
-      return res.status(404).json({
-        success: false,
-        msg: "Patient not found"
-      });
+      errors.email = "Patient not found";
+      return res.status(404).json(errors);
     }
-    Patient.comparePassword(password, patient.password, (err, isMatch) => {
-      if (err) {
-        throw err;
-      }
+
+    // Check Password
+    bcrypt.compare(password, patient.password).then(isMatch => {
       if (isMatch) {
-        const token = jwt.sign(patient.toJSON(), db.secret, {
-          expiresIn: 3600 // 1 hour
-        });
-        res.json({
-          success: true,
-          token: "JWT " + token,
-          patient: {
-            id: patient._id,
-            email: patient.email,
-            firstName: patient.firstName,
-            lastName: patient.lastName,
-            nurseRef: patient.nurseRef,
-            registeredDate: patient.registeredDate
-          }
+        // is Matched
+        const payload = {
+          id: patient.id,
+          firstName: patient.firstName,
+          lastName: patient.lastName,
+          email: patient.email,
+          nurse: patient.nurse,
+          role: patient.role
+        }; // Create JWT Payload
+
+        // Sign Token
+        jwt.sign(payload, db.secret, { expiresIn: 3600 }, (err, token) => {
+          res.json({
+            success: true,
+            token: "JWT " + token
+          });
         });
       } else {
-        return res.status(400).json({
-          success: false,
-          msg: "Wrong password"
-        });
+        errors.password = "Password incorrect";
+        return res.status(400).json(errors);
       }
     });
   });
 });
 
 router.get(
-  "/test",
+  "/current",
   passport.authenticate("jwt", {
     session: false
   }),
@@ -90,6 +113,7 @@ router.get(
     res.json({
       patient: req.user
     });
-  });
+  }
+);
 
 module.exports = router;
