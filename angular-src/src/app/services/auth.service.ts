@@ -22,6 +22,18 @@ export class AuthService {
       .map(res => res.json());
   }
 
+  registerProfile(profile) {
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization', this.authToken);
+    headers.append("Content-Type", "application/json");
+    return this.http
+      .post("http://localhost:5000/api/profile", profile, {
+        headers: headers
+      })
+      .map(res => res.json());
+  }
+
   authenticatePatient(patient) {
     let headers = new Headers();
     headers.append("Content-Type", "application/json");

@@ -17,18 +17,32 @@ export class ValidateService {
       return true;
     }
   }
+  
+  validateProfile(profile) {
+    if (
+      profile.handle == undefined ||
+      profile.gender == undefined ||
+      profile.birthday == undefined ||
+      profile.blood == undefined ||
+      profile.phone == undefined ||
+      profile.address == undefined
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   validateEmail(email) {
     const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
   }
 
-  confirmPassword(patient){
-    if(patient.password!==patient.password2){
+  confirmPassword(patient) {
+    if (patient.password !== patient.password2) {
       return false;
-    }else{
+    } else {
       return true;
     }
-
   }
 }

@@ -29,11 +29,11 @@ router.get(
       .then(profile => {
         if (!profile) {
           errors.noprofile = "There is no profile for this patient";
-          return res.status(404).json(errors);
+          return res.json(errors);
         }
         res.json(profile);
       })
-      .catch(err => res.status(404).json(err));
+      .catch(err => res.json(err));
   }
 );
 
@@ -49,7 +49,7 @@ router.post(
     // Check Validation
     if (!isValid) {
       // Return any errors with 400 status
-      return res.status(400).json(errors);
+      return res.json(errors);
     }
 
     const profileFields = {};
@@ -73,17 +73,17 @@ router.post(
           { patient: req.user.id },
           { $set: profileFields },
           { new: true }
-        ).then(profile => res.json(profile));
+        ).then(profile => res.json({profile,success:true}));
       } else {
         // Create
         // Check if handle exists
         Profile.findOne({ handle: profileFields.handle }).then(profile => {
           if (profile) {
             errors.handle = "That handle already exists";
-            res.status(400).json(errors);
+            res.json({errors,success:false});
           }
           // Save Profile
-          new Profile(profileFields).save().then(profile => res.json(profile));
+          new Profile(profileFields).save().then(profile => res.json({profile,success:true}));
         });
       }
     });
@@ -187,7 +187,7 @@ router.delete(
         // Save
         profile.save().then(profile => res.json(profile));
       })
-      .catch(err => res.status(404).json(err));
+      .catch(err => res.json(err));
   }
 );
 
@@ -211,7 +211,7 @@ router.delete(
         // Save
         profile.save().then(profile => res.json(profile));
       })
-      .catch(err => res.status(404).json(err));
+      .catch(err => res.json(err));
   }
 );
 

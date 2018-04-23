@@ -1,3 +1,48 @@
-<p>
-  profile works!
-</p>
+<div *ngIf="exist">
+  <h2 class="page-header">Welcome {{profile.handle}}</h2>
+  <ul class="list-group">
+    <li class="list-group-item">Gender : {{profile.gender}}</li>
+    <li class="list-group-item">Medical History : {{profile.history}}</li>
+    <li class="list-group-item">Blood Type : {{profile.blood}}</li>
+    <li class="list-group-item">Birthday : {{profile.birthday}}</li>
+    <li class="list-group-item">Address : {{profile.address}}</li>
+    <li class="list-group-item">Phone : {{profile.phone}}</li>
+    <li class="list-group-item">Age : {{age}}</li>
+  </ul>
+</div>
+
+
+<div *ngIf="!exist">
+  <h2 class="page-header">Create Profile</h2>
+  <form (submit)="onProfileSubmit()">
+    <div class="form-group">
+      <label>Handle Name</label>
+      <input required autocomplete="new-handle" type="text" [(ngModel)]="handle" name="handle" class="form-control" placeholder="required, unique and unchangeable, length is min 2, max 40 characters">
+    </div>
+    <div class="form-group">
+      <label>Medical History</label>
+      <input required autocomplete="new-history" type="text" [(ngModel)]="history" name="history" class="form-control" placeholder="not required. using comma to separate history like abc , def">
+    </div>
+    <div class="form-group">
+      <label>Gender</label>
+      <input required autocomplete="new-gender" type="text" [(ngModel)]="gender" name="gender" class="form-control" placeholder="required, choose only male or female">
+    </div>
+    <div class="form-group">
+      <label>Blood Type</label>
+      <input required autocomplete="new-blood" type="text" [(ngModel)]="blood" name="blood" class="form-control" placeholder="required, o, a, b, ab">
+    </div>
+    <div class="form-group">
+      <label>Birthday</label>
+      <input required autocomplete="new-birthday" type="date" [(ngModel)]="birthday" name="birthday" class="form-control">
+    </div>
+    <div class="form-group">
+      <label>Phone</label>
+      <input required autocomplete="new-phone" type="text" [(ngModel)]="phone" name="phone" class="form-control" placeholder="required, do not use hypen">
+    </div>
+    <div class="form-group">
+      <label>Address</label>
+      <input required autocomplete="new-address" type="address" [(ngModel)]="address" name="address" class="form-control" placeholder="required">
+    </div>
+    <input type="submit" class="btn btn-primary" value="Submit">
+  </form>
+</div>
