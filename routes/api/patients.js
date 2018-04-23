@@ -62,7 +62,7 @@ router.post("/login", (req, res) => {
 
   // Check Validation
   if (!isValid) {
-    return res.status(400).json(errors);
+    return res.json(errors);
   }
 
   const email = req.body.email;
@@ -73,7 +73,7 @@ router.post("/login", (req, res) => {
     // Check for patient
     if (!patient) {
       errors.email = "Patient not found";
-      return res.status(404).json(errors);
+      return res.json(errors);
     }
 
     // Check Password
@@ -98,7 +98,7 @@ router.post("/login", (req, res) => {
         });
       } else {
         errors.password = "Password incorrect";
-        return res.status(400).json(errors);
+        return res.json(errors);
       }
     });
   });
