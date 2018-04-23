@@ -29,7 +29,7 @@ router.post("/register", (req, res) => {
   Patient.findOne({ email: req.body.email }).then(patient => {
     if (patient) {
       errors.email = "Email already exists";
-      return res.status(400).json(errors);
+      return res.json(errors);
     } else {
       const newPatient = new Patient({
         nurse: req.body.nurse,
@@ -46,7 +46,7 @@ router.post("/register", (req, res) => {
           newPatient.password = hash;
           newPatient
             .save()
-            .then(patient => res.json(patient))
+            .then(patient => res.json({patient,success:true}))
             .catch(err => console.log(err));
         });
       });
