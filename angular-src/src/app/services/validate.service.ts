@@ -17,7 +17,19 @@ export class ValidateService {
       return true;
     }
   }
-  
+  validateVital(vital) {
+    if (
+      vital.temperature == undefined ||
+      vital.heartRate== undefined ||
+      vital.bloodPressure == undefined ||
+      vital.respiratoryRate == undefined
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   validateProfile(profile) {
     if (
       profile.handle == undefined ||

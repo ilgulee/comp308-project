@@ -16,7 +16,7 @@ export class AuthService {
     let headers = new Headers();
     headers.append("Content-Type", "application/json");
     return this.http
-      .post("http://localhost:5000/api/patients/register", patient, {
+      .post("api/patients/register", patient, {
         headers: headers
       })
       .map(res => res.json());
@@ -28,7 +28,39 @@ export class AuthService {
     headers.append('Authorization', this.authToken);
     headers.append("Content-Type", "application/json");
     return this.http
-      .post("http://localhost:5000/api/profile", profile, {
+      .post("api/profile", profile, {
+        headers: headers
+      })
+      .map(res => res.json());
+  }
+  registerVital(vital){
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization', this.authToken);
+    headers.append("Content-Type", "application/json");
+    return this.http
+      .post("api/profile/vital", vital, {
+        headers: headers
+      })
+      .map(res => res.json());
+  }
+  registerAlert(alert){
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization', this.authToken);
+    headers.append("Content-Type", "application/json");
+    return this.http
+      .post("api/profile/alert", alert, {
+        headers: headers
+      })
+      .map(res => res.json());
+  }
+
+  authenticateNurse(nurse) {
+    let headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    return this.http
+      .post("api/nurses/login", nurse, {
         headers: headers
       })
       .map(res => res.json());
@@ -38,13 +70,19 @@ export class AuthService {
     let headers = new Headers();
     headers.append("Content-Type", "application/json");
     return this.http
-      .post("http://localhost:5000/api/patients/login", patient, {
+      .post("api/patients/login", patient, {
         headers: headers
       })
       .map(res => res.json());
   }
 
   storePatientData(token) {
+    localStorage.setItem("id_token", token);
+    //localStorage.setItem('patient', JSON.stringify(patient));
+    this.authToken = token;
+    //this.patient = patient;
+  }
+  storeNurseData(token) {
     localStorage.setItem("id_token", token);
     //localStorage.setItem('patient', JSON.stringify(patient));
     this.authToken = token;
@@ -66,7 +104,7 @@ export class AuthService {
     headers.append('Authorization', this.authToken);
     headers.append("Content-Type", "application/json");
     return this.http
-      .get("http://localhost:5000/api/profile", {
+      .get("api/profile", {
         headers: headers
       })
       .map(res => res.json());

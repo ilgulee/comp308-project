@@ -108,7 +108,7 @@ router.post(
       };
       // Add to alert array on top
       profile.alerts.unshift(newAlert);
-      profile.save().then(profile => res.json(profile));
+      profile.save().then(profile => res.json({profile,success:true}));
     });
   }
 );
@@ -124,7 +124,7 @@ router.post(
     // Check Validation
     if (!isValid) {
       // Return any errors with 400 status
-      return res.status(400).json(errors);
+      return res.json(errors);
     }
     Profile.findOne({ patient: req.user.id }).then(profile => {
       const newVital = {
@@ -138,7 +138,7 @@ router.post(
       };
       // Add to vital array on top
       profile.vitals.unshift(newVital);
-      profile.save().then(profile => res.json(profile));
+      profile.save().then(profile => res.json({profile,success:true}));
     });
   }
 );

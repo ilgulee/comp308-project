@@ -10,7 +10,7 @@ const db = require("../../config/keys");
 router.post("/register", (req, res, next) => {
   Nurse.findOne({ email: req.body.email }).then(nurse => {
     if (nurse) {
-      return res.status(422).json({ email: "Email(username) already exists" });
+      return res.json({ email: "Email(username) already exists" });
     } else {
       let newNurse = new Nurse({
         firstName: req.body.firstName,
@@ -37,7 +37,7 @@ router.post("/register", (req, res, next) => {
 });
 
 //Authenticate(login)
-router.post("/authenticate", (req, res, next) => {
+router.post("/login", (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
 
@@ -46,7 +46,7 @@ router.post("/authenticate", (req, res, next) => {
       throw err;
     }
     if (!nurse) {
-      return res.status(404).json({
+      return res.json({
         success: false,
         msg: "Nurse not found"
       });
@@ -61,17 +61,10 @@ router.post("/authenticate", (req, res, next) => {
         });
         res.json({
           success: true,
-          token: "JWT " + token,
-          nurse: {
-            id: nurse._id,
-            email: nurse.email,
-            firstName: nurse.firstName,
-            lastName: nurse.lastName,
-            role: nurse.role
-          }
+          token: "JWT " + token
         });
       } else {
-        return res.status(400).json({
+        return res.json({
           success: false,
           msg: "Wrong password"
         });

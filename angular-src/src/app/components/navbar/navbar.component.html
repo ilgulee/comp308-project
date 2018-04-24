@@ -33,6 +33,11 @@
             <span></span>
           </a>
         </li>
+        <li *ngIf="authService.loggedIn()" class="nav-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+          <a class="nav-link" [routerLink]="['/nurse']">Nurse
+            <span></span>
+          </a>
+        </li>
         <li *ngIf="authService.loggedIn()" class="nav-item">
           <a class="nav-link" (click)="onLogoutClick()" href="#">Logout
             <span></span>

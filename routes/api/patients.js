@@ -23,7 +23,7 @@ router.post("/register", (req, res) => {
 
   // Check Validation
   if (!isValid) {
-    return res.status(400).json(errors);
+    return res.json(errors);
   }
 
   Patient.findOne({ email: req.body.email }).then(patient => {

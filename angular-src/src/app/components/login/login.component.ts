@@ -11,6 +11,8 @@ import { FlashMessagesService } from "angular2-flash-messages";
 export class LoginComponent implements OnInit {
   email: String;
   password: String;
+  roles: String[] = ["patient", "nurse"];
+  role: String = "patient";
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -20,26 +22,61 @@ export class LoginComponent implements OnInit {
   ngOnInit() {}
 
   onLoginSubmit() {
-    const patient = {
-      email: this.email,
-      password: this.password
-    };
+    if (this.role == "patient") {
+      const patient = {
+        email: this.email,
+        password: this.password
+      };
 
-    this.authService.authenticatePatient(patient).subscribe(data => {
-      if (data.success) {
-        this.authService.storePatientData(data.token);
-        this.flashMessage.show("You are now logged in", {
-          cssClass: "alert-success",
-          timeout: 3000
-        });
-        this.router.navigate(["/dashboard"]);
-      } else {
-        this.flashMessage.show((data.email!=undefined?data.email:"")+" "+(data.password!=undefined?data.password:""), {
-          cssClass: "alert-danger",
-          timeout: 3000
-        });
-        this.router.navigate(["/login"]);
-      }
-    });
+      this.authService.authenticatePatient(patient).subscribe(data => {
+        if (data.success) {
+          this.authService.storePatientData(data.token);
+          this.flashMessage.show("You are now logged in", {
+            cssClass: "alert-success",
+            timeout: 3000
+          });
+          this.router.navigate(["/dashboard"]);
+        } else {
+          this.flashMessage.show(
+            (data.email != undefined ? data.email : "") +
+              " " +
+              (data.password != undefined ? data.password : ""),
+            {
+              cssClass: "alert-danger",
+              timeout: 3000
+            }
+          );
+          this.router.navigate(["/login"]);
+        }
+      });
+    }else{
+      console.log(this.role);
+      const nurse = {
+        email: this.email,
+        password: this.password
+      };
+
+      this.authService.authenticateNurse(nurse).subscribe(data => {
+        if (data.success) {
+          this.authService.storeNurseData(data.token);
+          this.flashMessage.show("You are now logged in", {
+            cssClass: "alert-success",
+            timeout: 3000
+          });
+          this.router.navigate(["/nurse"]);
+        } else {
+          this.flashMessage.show(
+            (data.email != undefined ? data.email : "") +
+              " " +
+              (data.password != undefined ? data.password : ""),
+            {
+              cssClass: "alert-danger",
+              timeout: 3000
+            }
+          );
+          this.router.navigate(["/login"]);
+        }
+      });
+    }
   }
 }

@@ -1,3 +1,20 @@
-<p>
-  vital works!
-</p>
+<h2 class="page-header">Record Vital</h2>
+<form (submit)="onVitalSubmit()">
+  <div class="form-group">
+    <label>Body Temperature</label>
+    <input required autocomplete="new-temperature" type="text" [(ngModel)]="temperature" name="temperature" class="form-control">
+  </div>
+  <div class="form-group">
+    <label>Heart Rate</label>
+    <input required autocomplete="new-heartRate" type="text" [(ngModel)]="heartRate" name="heartRate" class="form-control">
+  </div>
+  <div class="form-group">
+    <label>Blood Pressure</label>
+    <input required autocomplete="new-bloodPressure" type="text" [(ngModel)]="bloodPressure" name="bloodPressure" class="form-control">
+  </div>
+  <div class="form-group">
+    <label>Respiratory Rate</label>
+    <input required autocomplete="new-respiratoryRate" type="text" [(ngModel)]="respiratoryRate" name="respiratoryRate" class="form-control">
+  </div>
+  <input type="submit" class="btn btn-primary" value="Submit">
+</form>
